@@ -1,0 +1,28 @@
+.font-size-small {
+    font-size: 14px
+}
+
+.font-size-medium {
+    font-size: 18px
+}
+
+.font-size-big {
+    font-size: 40px
+}
+
+.font-weight-light {
+    font-weight: 300px;
+} 
+
+.font-weight-normal {
+    font-weight: 400px;
+}
+
+.font-weight-bold {
+    font-weight: bold;
+}
+
+.DataGrid {
+    background: #FFFFFF;
+    padding: 88px 147px 0px 147px;
+}

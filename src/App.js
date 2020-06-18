@@ -1,6 +1,8 @@
 import React from 'react';
 import './App.css';
 import DataGrid from './app/components/data-grid';
+import GridHeader from './app/components/grid-header/grid-header';
+import CompanyBrand from './app/components/company-brand/company-brand';
 import { connect } from 'react-redux';
 
 
@@ -16,7 +18,12 @@ class App extends React.Component {
   render() {
         return (
         <div className="App">
-          <DataGrid/>
+          <div className="GridContainer">
+            <CompanyBrand></CompanyBrand>
+            <GridHeader header="Revenue Data" subHeader="Showing all data"></GridHeader>
+            <DataGrid/>  
+          </div>
+          
         </div>
       );
   }

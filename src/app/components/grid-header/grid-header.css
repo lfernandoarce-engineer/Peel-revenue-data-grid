@@ -1,0 +1,16 @@
+.HeaderContainer {
+    align-items: baseline;
+    margin-bottom: 45px;
+}
+
+.Header {
+    font-weight: 300;
+    font-size: 40px;
+    color: #000000;
+}
+
+.SubHeader {
+    font-weight: normal;
+    font-size: 18px;
+    color: #A2A3B2;
+}
