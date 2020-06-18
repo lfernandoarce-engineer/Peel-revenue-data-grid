@@ -1,12 +1,6 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { createStore } from 'redux'
+import revenueGrid from './reducers'
 
-function emptyReducer(state = [], action) {
-  switch (action.type) {
-    default:
-      return state
-  }
-}
+const store = createStore(revenueGrid);
 
-export default configureStore({
-  reducer: emptyReducer,
-});
+export default store;

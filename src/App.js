@@ -1,10 +1,11 @@
 import React from 'react';
 import './App.css';
+import DataGrid from './app/components/data-grid';
 
 function App() {
   return (
     <div className="App">
-      Start by checking out the README!
+      <DataGrid revData="[]"/>
     </div>
   );
 }
