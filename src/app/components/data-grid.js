@@ -1,76 +1,56 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { setPage } from '../actions'
-const axios = require('axios').default
+import React from 'react';
+import { connect } from 'react-redux';
+import { setPage } from '../actions';
+const axios = require('axios').default;
 
 class DataGrid extends React.Component {
-    constructor() {
-        super();
-     };
+    componentWillReceiveProps(newProps) {    
+        console.log(newProps);
+     }
     
+    componentWillMount = () => {
+        axios.get('http://app.peelinsights.com/api/test_stats/',  { headers: { 
+            "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT"}})
+              .then((response) => {
+                this.setState({data: response.data.results.all});
+                this.props.setPageDispatch(response.data.results);
+        })
+    };
     
-    componentWillMount() {
-        //Perform API call
-        fetch('http://app.peelinsights.com/api/test_stats/')
-             .then((response) => {
-                this.props.setPage(response.results.all);
-        });
-
-        fetch('http://app.peelinsights.com/api/test_stats/')
-            .then(response => response.results.all.json())
-            .then(data => this.props.setPage(data));
-    }
-
-    handlePageChanges = () => {
-        // stateUpdated = store.getState()
-
-        // if (this.state !== stateUpdated) {
-        //     this.setState(stateUpdated)
-        // }
-    }
-
-  
-
-  render() {
-    if(!this.props.revData) 
-        return (<div></div>);
-
-    return (
-        <div>
-        <table>
-           <tbody>
-              { this.props.revData.map((dayRev, i) => <TableRow key = {i} 
-                                                    data = {dayRev} />) }
-           </tbody>
-        </table>
-     </div>
-    )
-  }
-}
-
-class TableRow extends React.Component {
     render() {
         return (
-            <tr>
-                <td>{this.props.data.ds}</td>
-                <td>{this.props.data.y}</td>
-            </tr>
+            this.props.revData !== undefined && Array.isArray(this.props.revData.all) ? 
+            <div>
+                <table>
+                    <tbody>
+                        { this.props.revData.all.map((dayRev, i) => <TableRow key = {i} 
+                                                    data = {dayRev} />) }  
+                    </tbody>
+                </table>
+            </div> 
+        : <div></div>
         );
-    }      
-}
+    }
+};
 
-DataGrid.propTypes = {
-    revData: PropTypes.array,
-    setPage: PropTypes.func
-  }
-
+function TableRow(props){
+    return (
+        <tr>
+            <td>{props.data.ds}</td>
+            <td>{props.data.y}</td>
+        </tr>
+    );
+};
 
 const mapStateToProps = state => {
     return {
-      revData: state.data
+      revData: state.revenue
     };
-  };
+};
 
-export default connect(mapStateToProps, setPage
+const mapDispatchToProps = {
+    setPageDispatch: setPage
+}
+
+export default connect(mapStateToProps, mapDispatchToProps
 )(DataGrid)

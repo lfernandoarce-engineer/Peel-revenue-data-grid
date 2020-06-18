@@ -1,13 +1,27 @@
 import React from 'react';
 import './App.css';
 import DataGrid from './app/components/data-grid';
+import { connect } from 'react-redux';
 
-function App() {
-  return (
-    <div className="App">
-      <DataGrid revData="[]"/>
-    </div>
-  );
+
+class App extends React.Component {
+  constructor() {
+    super();
+    
+    this.state = {
+       data: []
+    }
+ };
+
+  render() {
+        return (
+        <div className="App">
+          <DataGrid/>
+        </div>
+      );
+  }
 }
 
-export default App;
+
+
+export default connect()(App);
