@@ -1,3 +1,14 @@
+.CompanyBrandContainer {
+    background: #F2F6FE;
+}
+
+.Header {
+    text-align: center;
+    font-weight: normal;
+    font-size: 22px;
+    color: #009CF5;
+}
+
 .Logo {
     width: 195px;
     height: 84px;
@@ -5,9 +16,11 @@
 }
 
 .ProfileImage {
-    width: 33.25px;
-    height: 44.27px;
+    border-radius: 20px;
+    width: 34.25px;
+    height: 35.27px;
     background: url(PhillipPhoto.png);
+    margin-left: 21px;
 }
 
 .MadeBy {
@@ -15,6 +28,11 @@
     font-size: 18px;
     text-align: right;
     color: #1B221A;
+}
+
+.MadeByContainer {
+    padding: 22px 15px 18px 0px;
+
 }
 
 .Author {

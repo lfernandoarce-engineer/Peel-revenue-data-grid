@@ -25,4 +25,6 @@
 .DataGrid {
     background: #FFFFFF;
     padding: 88px 147px 0px 147px;
+    overflow-y: auto;
+    height: 100vh;
 }

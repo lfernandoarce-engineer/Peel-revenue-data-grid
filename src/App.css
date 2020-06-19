@@ -1,5 +1,9 @@
 .App {
-  margin: 10%;
   text-align: center;
   font-size: 30px;
+  background: #F8FAFF;
+}
+
+.GridContainer {
+  margin: 0px 181px 0px 141px;
 }

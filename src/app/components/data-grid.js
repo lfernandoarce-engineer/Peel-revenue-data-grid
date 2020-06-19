@@ -17,12 +17,46 @@ class DataGrid extends React.Component {
                                             data: response.data.results.all,
                                             next_cursor: response.data.next_cursor });
         })
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        setTimeout(() => {
+            var gridDiv = document.getElementsByClassName("DataGrid")
+            console.log('Component DID UPDATE!')
+
+            if(gridDiv && gridDiv.length > 0 && 
+               gridDiv[0].clientHeight === gridDiv[0].scrollHeight) { //Grid is not scrollable
+                this.getNextPage();
+            }
+        }, 500);
+    }
+
+    getNextPage = () => {
+        axios.get(`http://app.peelinsights.com/api/test_stats/?cursor=${this.props.revData.next_cursor}`,  
+                    { headers: { "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT"}})
+                    .then((response) => {
+                        this.props.setPageDispatch({count: response.data.count, 
+                                                    data: response.data.results.all,
+                                                    next_cursor: response.data.next_cursor });})
     };
+
+    checkScrollLimit = (event) => {
+        var gridDiv = document.getElementsByClassName("DataGrid")
+        
+        if(gridDiv && gridDiv.length && this.isScrollAtBottom(gridDiv[0])) {
+            this.getNextPage();
+        }
+    }
+
+    isScrollAtBottom = (gridDiv) => {
+        var maxScrollTop = gridDiv.scrollHeight - gridDiv.clientHeight;
+        return maxScrollTop <= gridDiv.scrollTop;
+    }
     
     render() {
         return (
             this.props.revData !== undefined && Array.isArray(this.props.revData.data) ? 
-            <div className="DataGrid">
+            <div className="DataGrid" onScroll={this.checkScrollLimit}>
                 { this.props.revData.data.map((dayRev, i) => <TableRow key={i} 
                                         data={dayRev} />) }  
             </div> 
@@ -37,7 +71,7 @@ class TableRow extends React.Component {
             "display": "flex", 
             "flexDirection": "row", 
             "justifyContent": "space-between", 
-            "border-bottom": "solid lightgray 1px",
+            "borderBottom": "solid lightgray 1px",
             "padding": "21px 31px 21px 31px" };
 
         return (
@@ -59,7 +93,6 @@ class RevenueAmount extends React.Component {
     };
 }
 
-
 class RevenueDate extends React.Component {
     render() {
         const date = new Date(this.props.date)
@@ -74,7 +107,7 @@ class RevenueDate extends React.Component {
         }
 
         return (
-            <div style={{"display": "flex", "flexDirection": "column", "align-items": "baseline" }}>
+            <div style={{"display": "flex", "flexDirection": "column", "alignItems": "baseline" }}>
                 {displayDate}
                 <span className="font-size-small font-weight-normal">{this.props.revenueType}</span>
             </div>

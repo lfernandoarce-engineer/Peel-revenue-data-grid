@@ -18,8 +18,8 @@ class App extends React.Component {
   render() {
         return (
         <div className="App">
+          <CompanyBrand></CompanyBrand>
           <div className="GridContainer">
-            <CompanyBrand></CompanyBrand>
             <GridHeader header="Revenue Data" subHeader="Showing all data"></GridHeader>
             <DataGrid/>  
           </div>
