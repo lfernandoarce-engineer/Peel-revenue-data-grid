@@ -28,3 +28,17 @@
     overflow-y: auto;
     height: 100vh;
 }
+
+.DataGrid::-webkit-scrollbar {
+    display: none;
+}
+
+.ScrollDownVector {
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    background: url(Vector.png);
+    width: 30px;
+    height: 15px;
+}
+

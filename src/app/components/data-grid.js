@@ -21,14 +21,24 @@ class DataGrid extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         setTimeout(() => {
-            var gridDiv = document.getElementsByClassName("DataGrid")
-            console.log('Component DID UPDATE!')
-
-            if(gridDiv && gridDiv.length > 0 && 
-               gridDiv[0].clientHeight === gridDiv[0].scrollHeight) { //Grid is not scrollable
+            if(!this.isGridScrollable()) {
                 this.getNextPage();
             }
         }, 500);
+    }
+
+    isGridScrollable = () => {
+        var gridDiv = document.getElementsByClassName("DataGrid")
+
+        if(!gridDiv || gridDiv.length === 0) {
+            return false;
+        }
+
+        if(gridDiv[0].clientHeight === gridDiv[0].scrollHeight) {
+            return false;
+        }
+
+        return true;
     }
 
     getNextPage = () => {
@@ -41,9 +51,9 @@ class DataGrid extends React.Component {
     };
 
     checkScrollLimit = (event) => {
-        var gridDiv = document.getElementsByClassName("DataGrid")
+        var gridDiv = event.target
         
-        if(gridDiv && gridDiv.length && this.isScrollAtBottom(gridDiv[0])) {
+        if(gridDiv && this.isScrollAtBottom(gridDiv)) {
             this.getNextPage();
         }
     }
@@ -59,6 +69,7 @@ class DataGrid extends React.Component {
             <div className="DataGrid" onScroll={this.checkScrollLimit}>
                 { this.props.revData.data.map((dayRev, i) => <TableRow key={i} 
                                         data={dayRev} />) }  
+                {this.isGridScrollable() || Number.isInteger(this.props.revData.next_cursor) ? <div className="ScrollDownVector"></div> : <div></div>}
             </div> 
         : <div></div>
         );
