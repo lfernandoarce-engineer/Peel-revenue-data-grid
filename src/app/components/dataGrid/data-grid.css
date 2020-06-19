@@ -42,3 +42,8 @@
     height: 15px;
 }
 
+.TableRow {
+    border-bottom: solid lightgray 1px;
+    padding: 21px 31px 21px 31px
+}
+

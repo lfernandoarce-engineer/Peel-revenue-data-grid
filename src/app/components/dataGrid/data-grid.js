@@ -1,7 +1,8 @@
 import React from 'react';
 import './data-grid.css';
 import { connect } from 'react-redux';
-import { setPage } from '../actions';
+import { setPage, appendPage } from '../../actions';
+import Filters from './filters'
 const axios = require('axios').default;
 
 class DataGrid extends React.Component {
@@ -13,9 +14,10 @@ class DataGrid extends React.Component {
         axios.get('http://app.peelinsights.com/api/test_stats/',  { headers: { 
             "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT"}})
               .then((response) => {
-                this.props.setPageDispatch({count: response.data.count, 
+                this.props.appendPageDispath({count: response.data.count, 
                                             data: response.data.results.all,
-                                            next_cursor: response.data.next_cursor });
+                                            next_cursor: response.data.next_cursor,
+                                            group_by: response.data.group_by});
         })
     }
 
@@ -42,12 +44,15 @@ class DataGrid extends React.Component {
     }
 
     getNextPage = () => {
-        axios.get(`http://app.peelinsights.com/api/test_stats/?cursor=${this.props.revData.next_cursor}`,  
+        var groupBy = this.props.revData.group_by ? `&group_by=${this.props.revData.group_by}` : ''
+
+        axios.get(`http://app.peelinsights.com/api/test_stats/?cursor=${this.props.revData.next_cursor}${groupBy}`,  
                     { headers: { "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT"}})
                     .then((response) => {
-                        this.props.setPageDispatch({count: response.data.count, 
+                        this.props.appendPageDispath({count: response.data.count, 
                                                     data: response.data.results.all,
-                                                    next_cursor: response.data.next_cursor });})
+                                                    next_cursor: response.data.next_cursor, 
+                                                    group_by: response.data.group_by});})
     };
 
     checkScrollLimit = (event) => {
@@ -62,14 +67,36 @@ class DataGrid extends React.Component {
         var maxScrollTop = gridDiv.scrollHeight - gridDiv.clientHeight;
         return maxScrollTop <= gridDiv.scrollTop;
     }
+
+    filterData = (filter) => {
+        axios.get(`http://app.peelinsights.com/api/test_stats/${filter}`,  { headers: { 
+            "Access-Control-Allow-Methods": "GET, POST, DELETE, PUT"}})
+              .then((response) => {
+                this.props.setPageDispatch({count: response.data.count, 
+                                            data: response.data.results.all,
+                                            next_cursor: response.data.next_cursor, 
+                                            group_by: response.data.group_by});
+        })
+    }
+
+    groupDataBy = (grouping) => {
+        var groupBy = ""
+        var groupByOptions = ['week', 'month', 'quarter'];
+
+        if(groupByOptions.includes(grouping)) {
+           groupBy = `?group_by=${grouping}` 
+        }
+
+        this.filterData(groupBy)
+    }
     
     render() {
         return (
             this.props.revData !== undefined && Array.isArray(this.props.revData.data) ? 
             <div className="DataGrid" onScroll={this.checkScrollLimit}>
+                <Filters groupBy={this.groupDataBy}></Filters>
                 { this.props.revData.data.map((dayRev, i) => <TableRow key={i} 
                                         data={dayRev} />) }  
-                {this.isGridScrollable() || Number.isInteger(this.props.revData.next_cursor) ? <div className="ScrollDownVector"></div> : <div></div>}
             </div> 
         : <div></div>
         );
@@ -78,15 +105,8 @@ class DataGrid extends React.Component {
 
 class TableRow extends React.Component {
     render() {
-        var style = {
-            "display": "flex", 
-            "flexDirection": "row", 
-            "justifyContent": "space-between", 
-            "borderBottom": "solid lightgray 1px",
-            "padding": "21px 31px 21px 31px" };
-
-        return (
-            <div style={style}>
+         return (
+            <div className="TableRow" style={{"display": "flex", "flexDirection": "row", "justifyContent": "space-between"}}>
                 <RevenueDate date={this.props.data.ds} revenueType="Overall"></RevenueDate>
                 <RevenueAmount amount={this.props.data.y}></RevenueAmount>
             </div>
@@ -133,7 +153,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    setPageDispatch: setPage
+    setPageDispatch: setPage, 
+    appendPageDispath: appendPage
 }
 
 export default connect(mapStateToProps, mapDispatchToProps

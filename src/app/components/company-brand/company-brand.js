@@ -15,7 +15,7 @@ class CompanyBrand extends React.Component {
         return (
         <div className="CompanyBrandContainer" style={{"display": "flex", "flexDirection": "row", "justifyContent": "space-between"}}>
             <div className="Logo"></div>
-            <span className="Header" style={{"display": "flex", "alignItems": "center"}}>Frontend challenge</span>
+            <span className="PrincipalHeader" style={{"display": "flex", "alignItems": "center"}}>Frontend challenge</span>
             <MadeBy author="Phillipe Casorla"></MadeBy>
         </div>
       );

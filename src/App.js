@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import DataGrid from './app/components/data-grid';
+import DataGrid from './app/components/dataGrid/data-grid';
 import GridHeader from './app/components/grid-header/grid-header';
 import CompanyBrand from './app/components/company-brand/company-brand';
 import { connect } from 'react-redux';
